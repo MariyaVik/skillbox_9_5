@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:skillbox_9_5/view_hotels.dart';
+import 'package:skillbox_9_5/navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ViewHotels(),
+      initialRoute: Navigation.initialRoute,
+      onGenerateRoute: Navigation.onGenerateRoute,
     );
   }
 }
