@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:skillbox_9_5/models/hotel.dart';
 
@@ -12,21 +13,17 @@ class HotelsWidget extends StatefulWidget {
 
 class _HotelsWidgetState extends State<HotelsWidget> {
   bool _isGrid = false;
+  Dio dio = Dio();
+  List<Hotel> hotels = [];
+  bool isLoading = false;
+  bool hasError = false;
+  late String errorMessage;
 
-  final List<Hotel> _fakeData = [
-    Hotel(
-        uuid: "4651684", name: 'классный отель', poster: "disney_dreams_1.jpg"),
-    Hotel(uuid: "5893245", name: 'cool hotel', poster: "golden_ratio_1.jpg"),
-    Hotel(
-        uuid: "4651684", name: 'классный отель', poster: "disney_dreams_1.jpg"),
-    Hotel(uuid: "5893245", name: 'cool hotel', poster: "golden_ratio_1.jpg"),
-    Hotel(
-        uuid: "4651684", name: 'классный отель', poster: "disney_dreams_1.jpg"),
-    Hotel(uuid: "5893245", name: 'cool hotel', poster: "golden_ratio_1.jpg"),
-    Hotel(
-        uuid: "4651684", name: 'классный отель', poster: "disney_dreams_1.jpg"),
-    Hotel(uuid: "5893245", name: 'cool hotel', poster: "golden_ratio_1.jpg"),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
 
   void _onTabList() {
     if (_isGrid) {
@@ -42,6 +39,25 @@ class _HotelsWidgetState extends State<HotelsWidget> {
     }
   }
 
+  getData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await dio
+          .get('https://run.mocky.io/v3/ac888dc5-d193-4700-b12c-abb43e289301');
+      hotels = response.data.map<Hotel>((e) => Hotel.fromJson(e)).toList();
+    } on DioError catch (e) {
+      hasError = true;
+      errorMessage = e.message;
+    }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -52,22 +68,28 @@ class _HotelsWidgetState extends State<HotelsWidget> {
             IconButton(onPressed: _onTabGrid, icon: Icon(Icons.apps)),
           ],
         ),
-        body: _isGrid
-            ? GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemCount: _fakeData.length,
-                itemBuilder: (context, index) {
-                  return _CardForGrid(hotel: _fakeData[index]);
-                })
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ListView.builder(
-                    itemCount: _fakeData.length,
-                    itemBuilder: (context, index) {
-                      return _CardForList(hotel: _fakeData[index]);
-                    }),
-              ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : hasError
+                ? Center(
+                    child: Text(errorMessage),
+                  )
+                : _isGrid
+                    ? GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                        itemCount: hotels.length,
+                        itemBuilder: (context, index) {
+                          return _CardForGrid(hotel: hotels[index]);
+                        })
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: ListView.builder(
+                            itemCount: hotels.length,
+                            itemBuilder: (context, index) {
+                              return _CardForList(hotel: hotels[index]);
+                            }),
+                      ),
       ),
     );
   }
@@ -130,10 +152,9 @@ class _CardForGrid extends StatelessWidget {
           ),
           Expanded(
             flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(hotel.name, style: _textStyleHeader),
-            ),
+            child: Center(
+                child: Text(hotel.name,
+                    style: _textStyleHeader, textAlign: TextAlign.center)),
           ),
           Expanded(
             child: InkWell(
