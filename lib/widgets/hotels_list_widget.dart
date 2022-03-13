@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:skillbox_9_5/models/hotel.dart';
+import 'package:skillbox_9_5/navigation.dart';
 
 final TextStyle _textStyleHeader = TextStyle(fontSize: 16);
 
@@ -50,7 +51,11 @@ class _HotelsWidgetState extends State<HotelsWidget> {
       hotels = response.data.map<Hotel>((e) => Hotel.fromJson(e)).toList();
     } on DioError catch (e) {
       hasError = true;
-      errorMessage = e.message;
+      if (e.response != null) {
+        errorMessage = e.response!.data['message'];
+      } else {
+        errorMessage = e.message;
+      }
     }
 
     setState(() {
@@ -119,7 +124,12 @@ class _CardForList extends StatelessWidget {
                 children: [
                   Expanded(child: Text(hotel.name, style: _textStyleHeader)),
                   ElevatedButton(
-                      onPressed: () {}, child: const Text('Подробнее')),
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                            NavRouteName.hotelDetails,
+                            arguments: hotel);
+                      },
+                      child: const Text('Подробнее')),
                 ],
               ),
             ),
@@ -158,7 +168,10 @@ class _CardForGrid extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .pushNamed(NavRouteName.hotelDetails, arguments: hotel);
+              },
               child: Ink(
                 height: null,
                 width: double.infinity,
