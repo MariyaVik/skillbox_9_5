@@ -4,6 +4,9 @@ import 'package:skillbox_9_5/models/hotel.dart';
 import 'package:skillbox_9_5/models/hotel_details.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
+final TextStyle _textStyleMainInfo =
+    TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
+
 class HotelDetailsWidget extends StatefulWidget {
   Hotel currentHotel;
   HotelDetailsWidget({required this.currentHotel, Key? key}) : super(key: key);
@@ -64,30 +67,120 @@ class _HotelDetailsWidgetState extends State<HotelDetailsWidget> {
                     ? Center(
                         child: Text(errorMessage),
                       )
-                    : Column(
-                        children: [
-                          CarouselSlider.builder(
-                            itemCount: curHotel.photos.length,
-                            itemBuilder: (context, index, realIndex) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
-                                child: SizedBox(
-                                  height: 300,
-                                  width: 400,
-                                  child: Image(
-                                    image: AssetImage("assets/images/" +
-                                        curHotel.photos[index]),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            },
-                            options: CarouselOptions(
-                                // enlargeCenterPage: true,
-                                ),
-                          ),
-                        ],
+                    : SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _PhotoCarousel(hotel: curHotel),
+                            _MainInfo(hotel: curHotel),
+                            _Services(hotel: curHotel),
+                          ],
+                        ),
                       )));
+  }
+}
+
+class _MainInfo extends StatelessWidget {
+  HotelDetails hotel;
+  _MainInfo({required this.hotel, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List<List> _mainInfoHeaders = [
+      ['Страна: ', hotel.address.country],
+      ['Город: ', hotel.address.city],
+      ['Улица: ', hotel.address.street],
+      ['Рейтинг: ', hotel.rating]
+    ];
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+          children: _mainInfoHeaders
+              .map<Widget>((e) => Row(
+                    children: [
+                      Text(e[0]),
+                      Text(e[1].toString(), style: _textStyleMainInfo)
+                    ],
+                  ))
+              .toList()),
+    );
+  }
+}
+
+class _Services extends StatelessWidget {
+  HotelDetails hotel;
+  _Services({required this.hotel, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Сервисы', style: TextStyle(fontSize: 24)),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Платные', style: TextStyle(fontSize: 20)),
+                    ),
+                    ...hotel.services.paid.map<Widget>((e) => Text(e)).toList()
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text('Бесплатно', style: TextStyle(fontSize: 20)),
+                    ),
+                    ...hotel.services.free.map<Widget>((e) => Text(e)).toList()
+                  ],
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _PhotoCarousel extends StatefulWidget {
+  HotelDetails hotel;
+  _PhotoCarousel({required this.hotel, Key? key}) : super(key: key);
+
+  @override
+  State<_PhotoCarousel> createState() => __PhotoCarouselState();
+}
+
+class __PhotoCarouselState extends State<_PhotoCarousel> {
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider.builder(
+      itemCount: widget.hotel.photos.length,
+      itemBuilder: (context, index, realIndex) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: SizedBox(
+            height: 300,
+            width: 400,
+            child: Image(
+              image: AssetImage("assets/images/" + widget.hotel.photos[index]),
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+      options: CarouselOptions(),
+    );
   }
 }
