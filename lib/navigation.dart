@@ -15,7 +15,7 @@ class Navigation {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case NavRouteName.home:
-        return MaterialPageRoute(builder: (context) => HotelsWidget());
+        return MaterialPageRoute(builder: (context) => const HotelsWidget());
       case NavRouteName.hotelDetails:
         final arg = settings.arguments as Hotel;
         return MaterialPageRoute(

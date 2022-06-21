@@ -4,12 +4,13 @@ import 'package:skillbox_9_5/models/hotel.dart';
 import 'package:skillbox_9_5/models/hotel_details.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-final TextStyle _textStyleMainInfo =
+const TextStyle _textStyleMainInfo =
     TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
 
 class HotelDetailsWidget extends StatefulWidget {
-  Hotel currentHotel;
-  HotelDetailsWidget({required this.currentHotel, Key? key}) : super(key: key);
+  final Hotel currentHotel;
+  const HotelDetailsWidget({required this.currentHotel, Key? key})
+      : super(key: key);
 
   @override
   State<HotelDetailsWidget> createState() => _HotelDetailsWidgetState();
@@ -62,7 +63,7 @@ class _HotelDetailsWidgetState extends State<HotelDetailsWidget> {
               centerTitle: true,
             ),
             body: isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : hasError
                     ? Center(
                         child: Text(errorMessage),
@@ -81,8 +82,8 @@ class _HotelDetailsWidgetState extends State<HotelDetailsWidget> {
 }
 
 class _MainInfo extends StatelessWidget {
-  HotelDetails hotel;
-  _MainInfo({required this.hotel, Key? key}) : super(key: key);
+  final HotelDetails hotel;
+  const _MainInfo({required this.hotel, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +109,8 @@ class _MainInfo extends StatelessWidget {
 }
 
 class _Services extends StatelessWidget {
-  HotelDetails hotel;
-  _Services({required this.hotel, Key? key}) : super(key: key);
+  final HotelDetails hotel;
+  const _Services({required this.hotel, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +119,7 @@ class _Services extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Сервисы', style: TextStyle(fontSize: 24)),
+          const Text('Сервисы', style: TextStyle(fontSize: 24)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -126,8 +127,8 @@ class _Services extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text('Платные', style: TextStyle(fontSize: 20)),
                     ),
                     ...hotel.services.paid.map<Widget>((e) => Text(e)).toList()
@@ -138,8 +139,8 @@ class _Services extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text('Бесплатно', style: TextStyle(fontSize: 20)),
                     ),
                     ...hotel.services.free.map<Widget>((e) => Text(e)).toList()
@@ -155,8 +156,8 @@ class _Services extends StatelessWidget {
 }
 
 class _PhotoCarousel extends StatefulWidget {
-  HotelDetails hotel;
-  _PhotoCarousel({required this.hotel, Key? key}) : super(key: key);
+  final HotelDetails hotel;
+  const _PhotoCarousel({required this.hotel, Key? key}) : super(key: key);
 
   @override
   State<_PhotoCarousel> createState() => __PhotoCarouselState();

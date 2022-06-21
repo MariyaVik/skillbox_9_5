@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:skillbox_9_5/models/hotel.dart';
 import 'package:skillbox_9_5/navigation.dart';
 
-final TextStyle _textStyleHeader = TextStyle(fontSize: 16);
+const TextStyle _textStyleHeader = TextStyle(fontSize: 16);
 
 class HotelsWidget extends StatefulWidget {
-  HotelsWidget({Key? key}) : super(key: key);
+  const HotelsWidget({Key? key}) : super(key: key);
 
   @override
   State<HotelsWidget> createState() => _HotelsWidgetState();
@@ -69,20 +69,21 @@ class _HotelsWidgetState extends State<HotelsWidget> {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(onPressed: _onTabList, icon: Icon(Icons.list)),
-            IconButton(onPressed: _onTabGrid, icon: Icon(Icons.apps)),
+            IconButton(onPressed: _onTabList, icon: const Icon(Icons.list)),
+            IconButton(onPressed: _onTabGrid, icon: const Icon(Icons.apps)),
           ],
         ),
         body: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : hasError
                 ? Center(
                     child: Text(errorMessage),
                   )
                 : _isGrid
                     ? GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2),
                         itemCount: hotels.length,
                         itemBuilder: (context, index) {
                           return _CardForGrid(hotel: hotels[index]);
@@ -102,7 +103,7 @@ class _HotelsWidgetState extends State<HotelsWidget> {
 
 class _CardForList extends StatelessWidget {
   final Hotel hotel;
-  _CardForList({required this.hotel, Key? key}) : super(key: key);
+  const _CardForList({required this.hotel, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -142,7 +143,7 @@ class _CardForList extends StatelessWidget {
 
 class _CardForGrid extends StatelessWidget {
   final Hotel hotel;
-  _CardForGrid({required this.hotel, Key? key}) : super(key: key);
+  const _CardForGrid({required this.hotel, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +177,7 @@ class _CardForGrid extends StatelessWidget {
                 height: null,
                 width: double.infinity,
                 color: Colors.blue,
-                child: Center(
+                child: const Center(
                     child: Text(
                   'Подробнее',
                   style: TextStyle(color: Colors.white),
