@@ -106,9 +106,10 @@ class _CardForList extends StatelessWidget {
   const _CardForList({required this.hotel, Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // CardTheme _cardTheme = Theme.of(context).cardTheme;
     return Card(
       elevation: 8,
-      clipBehavior: Clip.antiAlias,
+      // clipBehavior: _cardTheme.clipBehavior,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
@@ -176,7 +177,7 @@ class _CardForGrid extends StatelessWidget {
               child: Ink(
                 height: null,
                 width: double.infinity,
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
                 child: const Center(
                     child: Text(
                   'Подробнее',
