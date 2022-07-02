@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:skillbox_9_5/models/hotel.dart';
 import 'package:skillbox_9_5/navigation.dart';
+import 'package:skillbox_9_5/theme/theme_manager.dart';
+import 'package:provider/provider.dart';
 
 const TextStyle _textStyleHeader = TextStyle(fontSize: 16);
 
@@ -73,6 +75,7 @@ class _HotelsWidgetState extends State<HotelsWidget> {
             IconButton(onPressed: _onTabGrid, icon: const Icon(Icons.apps)),
           ],
         ),
+        drawer: Drawer(child: ChangeThemeWidget()),
         body: isLoading
             ? const Center(child: CircularProgressIndicator())
             : hasError
@@ -98,6 +101,23 @@ class _HotelsWidgetState extends State<HotelsWidget> {
                       ),
       ),
     );
+  }
+}
+
+class ChangeThemeWidget extends StatelessWidget {
+  const ChangeThemeWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _themeProvider = Provider.of<ThemeManager>(context);
+    return Center(
+        child: Switch.adaptive(
+            value: _themeProvider.themeMode == ThemeMode.dark,
+            onChanged: (newValue) {
+              _themeProvider.toggleTheme(newValue);
+            }));
   }
 }
 

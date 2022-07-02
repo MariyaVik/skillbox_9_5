@@ -30,6 +30,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio: ^4.0.4
+  provider: ^6.0.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -82,7 +83,7 @@ flutter:
   fonts:
     - family: Urbanist
       fonts:
-        - asset: fonts/Urbanist-Light.ttf
+        - asset: fonts/Urbanist-Medium.ttf
         # - asset: fonts/Schyler-Italic.ttf
         #   style: italic
   #   - family: Trajan Pro
